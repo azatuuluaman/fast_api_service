@@ -20,8 +20,8 @@ class PyObjectId(ObjectId):
 
 
 class User(BaseModel):
-    __tablename__ = 'users'
-    id: PyObjectId = Field(default_factory=PyObjectId, alias='_id')
+    __tablename__ = "users"
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     email: str = Field(...)
 
 
@@ -62,13 +62,12 @@ class SignInUser(User):
         }
 
 
-
 class UpdateUser(User):
     first_name: str = Field(...)
     last_name: str = Field(...)
     phone_number: str = Field(...)
-    old_password: Optional[str] = ''
-    new_password: Optional[str] = ''
+    old_password: Optional[str] = ""
+    new_password: Optional[str] = ""
 
     class Config:
         schema_extra = {
@@ -80,5 +79,3 @@ class UpdateUser(User):
                 "phone_number": "+996123123123",
             }
         }
-
-
