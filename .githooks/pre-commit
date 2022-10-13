@@ -1,2 +1,2 @@
+echo "code refactor using black"
 black .
-flake8 .
