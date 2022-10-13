@@ -41,8 +41,8 @@ class CreateUser(User):
             "example": {
                 "_id": "507f1f77bcf86cd799439011",
                 "first_name": "Jane",
-                "last_name": "Doe",
-                "email": "jdoe@example.com",
+    "last_name": "Doe",
+                            "email": "jdoe@example.com",
                 "phone_number": "+996999312292",
                 "password": "admin12345",
                 "repeat_password": "admin12345",
