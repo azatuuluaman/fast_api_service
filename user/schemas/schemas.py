@@ -30,6 +30,10 @@ class CreateUser(User):
     last_name: str = Field(...)
     phone_number: str = Field(...)
     password: str = Field(...)
+    repeat_password: str = Field(...)
+
+    def is_valid(self):
+        return self.password == self.repeat_password
 
     class Config:
         json_encoders = {ObjectId: str}
@@ -40,7 +44,8 @@ class CreateUser(User):
                 "last_name": "Doe",
                 "email": "jdoe@example.com",
                 "phone_number": "+996999312292",
-                "password": "admin12345"
+                "password": "admin12345",
+                "repeat_password": "admin12345",
             }
         }
 
