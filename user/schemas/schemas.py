@@ -39,10 +39,9 @@ class CreateUser(User):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "_id": "507f1f77bcf86cd799439011",
                 "first_name": "Jane",
-    "last_name": "Doe",
-                            "email": "jdoe@example.com",
+                "last_name": "Doe",
+                "email": "jdoe@example.com",
                 "phone_number": "+996999312292",
                 "password": "admin12345",
                 "repeat_password": "admin12345",
@@ -72,7 +71,6 @@ class UpdateUser(User):
     class Config:
         schema_extra = {
             "example": {
-                "_id": "507f1f77bcf86cd799439011",
                 "first_name": "Jane",
                 "last_name": "Doe",
                 "email": "jdoe@example.com",
