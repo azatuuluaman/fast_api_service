@@ -10,7 +10,7 @@ from user.modules.utils import (
     get_hashed_password,
     create_access_token,
     create_refresh_token,
-    verify_password
+    verify_password,
 )
 
 router = APIRouter()
@@ -46,23 +46,27 @@ async def login(user: SignInUser = Body(...)):
     if get_user is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect email or password"
+            detail="Incorrect email or password",
         )
-    
-    hashed_pass = get_hashed_password(get_user.get('password'))
+
+    hashed_pass = get_hashed_password(get_user.get("password"))
 
     if not verify_password(user.get("password"), hashed_pass):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect email or password"
+            detail="Incorrect email or password",
         )
-    return JSONResponse(status_code=status.HTTP_200_OK, content=\
-    {
-        "access_token": create_access_token(user.get('email')),
-        "refresh_token": create_refresh_token(user.get('email')),
-    })
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "access_token": create_access_token(user.get("email")),
+            "refresh_token": create_refresh_token(user.get("email")),
+        },
+    )
 
 
-@router.get('/me', summary='Get details of currently logged in user', response_model=GetUser)
+@router.get(
+    "/me", summary="Get details of currently logged in user", response_model=GetUser
+)
 async def get_me(user: GetUser = Depends(get_current_user)):
     return JSONResponse(status_code=status.HTTP_200_OK, content=user)

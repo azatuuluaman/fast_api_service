@@ -60,6 +60,7 @@ class SignInUser(User):
             "example": {"email": "jdoe@example.com", "password": "some_password"}
         }
 
+
 class GetUser(User):
     first_name: str = Field(...)
     last_name: str = Field(...)
