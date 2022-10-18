@@ -57,11 +57,18 @@ class SignInUser(User):
 
     class Config:
         schema_extra = {
-            "example": {
-                "email": "jdoe@example.com",
-                "password": "some_password"
-            }
+            "example": {"email": "jdoe@example.com", "password": "some_password"}
         }
+
+class GetUser(User):
+    first_name: str = Field(...)
+    last_name: str = Field(...)
+    phone_number: str = Field(...)
+
+
+class TokenPayload(BaseModel):
+    email: str = Field(...)
+    exp: int
 
 
 class UpdateUser(User):
