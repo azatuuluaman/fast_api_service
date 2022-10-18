@@ -33,10 +33,13 @@ class CreateUser(User):
     repeat_password: str = Field(...)
 
     def is_valid(self):
-        return self.password == self.repeat_password
+        result = self.password == self.repeat_password
+        self.__delattr__("repeat_password")
+        return result
 
     class Config:
         json_encoders = {ObjectId: str}
+
         schema_extra = {
             "example": {
                 "first_name": "Jane",
@@ -55,8 +58,8 @@ class SignInUser(User):
     class Config:
         schema_extra = {
             "example": {
-                "_id": "507f1f77bcf86cd799439011",
                 "email": "jdoe@example.com",
+                "password": "some_password"
             }
         }
 
