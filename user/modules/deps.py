@@ -17,12 +17,7 @@ reuseable_oauth = OAuth2PasswordBearer(tokenUrl="/signIn", scheme_name="JWT")
 async def get_current_user(token: str = Depends(reuseable_oauth)) -> GetUser:
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
-
-        token_data = TokenPayload(**payload)
-        print(token_data.exp)
-        print(token_data.sub)
-
-        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+        if datetime.fromtimestamp(payload.get("exp")) < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token expired",
@@ -35,8 +30,8 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> GetUser:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
-    user = await db["users"].find_one({"email": token_data.get("sub")})
+    
+    user = await db["users"].find_one({"email": payload.get("sub")})
 
     if user is None:
         raise HTTPException(

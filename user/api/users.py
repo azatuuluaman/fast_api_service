@@ -16,12 +16,6 @@ from user.modules.utils import (
 router = APIRouter()
 db = client.users
 
-
-async def get_current_user(email, password):
-    user = await db["users"].find_one({"email": email, "password": password})
-    return user
-
-
 @router.post(
     "/signUp", response_description="register new user", response_model=CreateUser
 )
@@ -43,7 +37,7 @@ async def login(user: SignInUser = Body(...)):
     user = jsonable_encoder(user)
     get_user = await db["users"].find_one({"email": user.get("email")})
 
-    if get_user is None:
+    if get_user is None :
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect email or password",
@@ -56,6 +50,7 @@ async def login(user: SignInUser = Body(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect email or password",
         )
+        
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={
@@ -68,5 +63,6 @@ async def login(user: SignInUser = Body(...)):
 @router.get(
     "/me", summary="Get details of currently logged in user", response_model=GetUser
 )
+
 async def get_me(user: GetUser = Depends(get_current_user)):
     return JSONResponse(status_code=status.HTTP_200_OK, content=user)
