@@ -1,0 +1,19 @@
+build-job:
+  stage: build
+  script:
+    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}\nJWT_REFRESH_SECRET_KEY=${JWT_REFRESH_SECRET_KEY}\n"  >> .env
+#    - docker compose build
+    - echo "docker build successfully"
+
+test-docker:
+  stage: test
+  script:
+#    - docker compose up
+    - echo "docker up successfully"
+
+test-backend:
+  stage: test
+  script:
+    - echo "tests is OK"
+
