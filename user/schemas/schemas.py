@@ -23,6 +23,7 @@ class User(BaseModel):
     __tablename__ = "users"
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     email: str = Field(...)
+    is_active: Optional[bool] = False
 
 
 class CreateUser(User):

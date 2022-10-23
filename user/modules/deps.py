@@ -30,7 +30,7 @@ async def get_current_user(token: str = Depends(reuseable_oauth)) -> GetUser:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     user = await db["users"].find_one({"email": payload.get("sub")})
 
     if user is None:
