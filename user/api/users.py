@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Body, status, Depends, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -96,19 +98,28 @@ async def update_user(user: GetUser, current_user: GetUser = Depends(get_current
         )
         if update_result.modified_count == 1:
             if (
-                updated_user := await db["users"].find_one(
-                    {"email": current_user.get("email")}
-                )
+                    updated_user := await db["users"].find_one(
+                        {"email": current_user.get("email")}
+                    )
             ) is not None:
                 return updated_user
 
     if (
-        existing_user := await db["users"].find_one(
-            {"email": current_user.get("email")}
-        )
+            existing_user := await db["users"].find_one(
+                {"email": current_user.get("email")}
+            )
     ) is not None:
         return existing_user
 
     raise HTTPException(
         status_code=404, detail=f"User {current_user.get('email')} not found"
     )
+
+
+@router.post("/create", response_description="an endpoint for get users from django service", response_model=List[CreateUser])
+async def get_users_from_django(users: List[CreateUser]):
+    users = jsonable_encoder(users)
+    created_users = await db.users.insert_many(users)
+    ids = list(map(str, created_users.inserted_ids))
+    created_users = await db.users.find({"_id": {"$in": ids}}).to_list(len(ids))
+    return created_users
