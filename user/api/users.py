@@ -27,6 +27,11 @@ db = client.users
 )
 async def activate(id: str, activate_code: str):
     user = await db["users"].find_one({"_id": id})
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect id",
+        )
     email = user.get("email")
     code = get_code_by_email(email)
     if code != activate_code:
@@ -98,16 +103,16 @@ async def update_user(user: GetUser, current_user: GetUser = Depends(get_current
         )
         if update_result.modified_count == 1:
             if (
-                    updated_user := await db["users"].find_one(
-                        {"email": current_user.get("email")}
-                    )
+                updated_user := await db["users"].find_one(
+                    {"email": current_user.get("email")}
+                )
             ) is not None:
                 return updated_user
 
     if (
-            existing_user := await db["users"].find_one(
-                {"email": current_user.get("email")}
-            )
+        existing_user := await db["users"].find_one(
+            {"email": current_user.get("email")}
+        )
     ) is not None:
         return existing_user
 
@@ -116,7 +121,11 @@ async def update_user(user: GetUser, current_user: GetUser = Depends(get_current
     )
 
 
-@router.post("/create", response_description="an endpoint for get users from django service", response_model=List[CreateUser])
+@router.post(
+    "/create",
+    response_description="an endpoint for get users from django service",
+    response_model=List[CreateUser],
+)
 async def get_users_from_django(users: List[CreateUser]):
     users = jsonable_encoder(users)
     created_users = await db.users.insert_many(users)

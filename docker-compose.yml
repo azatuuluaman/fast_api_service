@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  backend:
+  fast-api:
     container_name: fast_api
     build: .
     volumes:
@@ -24,3 +24,8 @@ services:
 
   redis:
     image: redis:alpine
+
+networks:
+  default:
+    external:
+      name: micro-service

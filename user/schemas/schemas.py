@@ -31,7 +31,7 @@ class CreateUser(User):
     last_name: str = Field(...)
     phone_number: str = Field(...)
     password: str = Field(...)
-    repeat_password: str = Field(...)
+    repeat_password: Optional[str] = Field(...)
 
     def is_valid(self):
         result = self.password == self.repeat_password
