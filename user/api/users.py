@@ -96,16 +96,16 @@ async def update_user(user: GetUser, current_user: GetUser = Depends(get_current
         )
         if update_result.modified_count == 1:
             if (
-                    updated_user := await db["users"].find_one(
-                        {"email": current_user.get("email")}
-                    )
+                updated_user := await db["users"].find_one(
+                    {"email": current_user.get("email")}
+                )
             ) is not None:
                 return updated_user
 
     if (
-            existing_user := await db["users"].find_one(
-                {"email": current_user.get("email")}
-            )
+        existing_user := await db["users"].find_one(
+            {"email": current_user.get("email")}
+        )
     ) is not None:
         return existing_user
 

@@ -16,7 +16,7 @@ user_db = user_client.users
 
 
 @router.get("/", response_model=List[AdvertBase])
-async def get_adverts(limit: int=50):
+async def get_adverts(limit: int = 50):
     adverts = await advert_db["advert"].find().to_list(limit)
     return adverts
 
