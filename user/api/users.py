@@ -58,7 +58,7 @@ async def register(user: CreateUser = Body(...)):
     created_user = await db["users"].find_one({"_id": inserted_user.inserted_id})
     code = get_random_string(6)
     email = user.get("email")
-    with get_redis() as r:
+    with get_redis() as r: # without redis
         r.set(email, code)
 
     send_code(email, code)
@@ -128,7 +128,7 @@ async def update_user(user: GetUser, current_user: GetUser = Depends(get_current
 )
 async def get_users_from_django(users: List[CreateUser]):
     users = jsonable_encoder(users)
-    created_users = await db.users.insert_many(users)
+    created_users = await db.users.insert_many(users) # bag task
     ids = list(map(str, created_users.inserted_ids))
     created_users = await db.users.find({"_id": {"$in": ids}}).to_list(len(ids))
     return created_users

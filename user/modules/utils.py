@@ -11,7 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from passlib.context import CryptContext
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 2  # 2 hours
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = os.environ.get(
@@ -59,13 +59,13 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) ->
 
 
 def get_redis() -> redis.Redis:
-    return redis.Redis(host="redis", port=6379, decode_responses=True)
+    return redis.Redis(host="redis", port=6379, decode_responses=True) # environ
 
 
 def send_code(email: str, code: str):
-    s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+    s = smtplib.SMTP(host="smtp.gmail.com", port=587)  # environ
     s.starttls()
-    s.login(os.environ.get("EMAIL_ADDRESS"), os.environ.get("EMAIL_PASSWORD"))
+    s.login(os.environ.get("EMAIL_ADDRESS"), os.environ.get("EMAIL_PASSWORD")) # startup
     msg = MIMEMultipart()
     msg["From"] = os.environ.get("MY_ADDRESS")
     msg["To"] = email

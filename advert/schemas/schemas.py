@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from bson import ObjectId
 from typing import Optional
 from user.schemas.schemas import PyObjectId
@@ -31,7 +31,7 @@ class AdvertBase(BaseModel):
     promote: Optional[AdvertPromote]
     city: str
     end_price: Optional[str]
-    email: str
+    email: EmailStr
     wa_number: str
 
     class Config:
@@ -68,7 +68,7 @@ class AdvertUpdate(BaseModel):
     promote: Optional[AdvertPromote]
     city: Optional[str]
     end_price: Optional[str]
-    email: Optional[str]
+    email: Optional[EmailStr]
     wa_number: Optional[str]
 
     class Config:
