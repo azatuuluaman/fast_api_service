@@ -10,7 +10,7 @@ client = boto3.client('s3', aws_access_key_id='AKIA6RGYYJLGVLF4VUI2',
 "Затем через её адрес сохранить в АВС" \
 "После чего удалить картинку во временной папке"
 
-
+# test
 def upload_files(img_name, bucket, object_name=None, args=None):
     """ if object_name is not None?"""
     if object_name is None:
