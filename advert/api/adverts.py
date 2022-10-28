@@ -9,6 +9,7 @@ from user.database.db import client as user_client
 from user.schemas.schemas import GetUser
 from advert.schemas.schemas import AdvertBase, AdvertUpdate
 from user.modules.deps import get_current_user
+from aws import upload_files
 
 router = APIRouter()
 advert_db = client.adverts
@@ -24,6 +25,8 @@ async def get_adverts(limit: int = 50):
 @router.post("/", response_model=AdvertBase)
 async def create_advert(advert: AdvertBase, user: GetUser = Depends(get_current_user)):
     advert = jsonable_encoder(advert)
+    for i in advert.get("photo"):
+        upload_files(advert.get('title'), '')
     new_advert = await advert_db["advert"].insert_one(advert)
     created_advert = await advert_db["advert"].find_one({"_id": new_advert.inserted_id})
 
@@ -32,7 +35,7 @@ async def create_advert(advert: AdvertBase, user: GetUser = Depends(get_current_
 
 @router.put("/{id}", response_model=AdvertBase)
 async def update_advert(
-    id: str, advert: AdvertUpdate, user: GetUser = Depends(get_current_user)
+        id: str, advert: AdvertUpdate, user: GetUser = Depends(get_current_user)
 ):
     advert = {k: v for k, v in advert.dict().items() if v is not None}
     if (current_advert := await advert_db["advert"].find_one({"_id": id})) is None:

@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel, Field, EmailStr
 from bson import ObjectId
-from typing import Optional
+from typing import Optional, List
 from user.schemas.schemas import PyObjectId
 
 
@@ -33,6 +33,7 @@ class AdvertBase(BaseModel):
     end_price: Optional[str]
     email: EmailStr
     wa_number: str
+    photo: Optional[List[str]]
 
     class Config:
         json_encoders = {ObjectId: str}
